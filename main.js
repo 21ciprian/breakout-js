@@ -25,6 +25,7 @@ for (let c = 0; c < brickColumnCount; c++) {
 }
 const brickOffsetTop = 30;
 const brickOffsetLeft = 30;
+let score = 0
 
 
 //Create ball
@@ -85,10 +86,16 @@ function collisionDetection() {
         if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
           dy = -dy;
           b.status = 0;
+          score++
         }
       }
     }
   }
+}
+function drawScore() {
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "white";
+  ctx.fillText("Score: " + score, 8, 20);
 }
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -96,6 +103,7 @@ function draw() {
   drawBall()
   drawPaddle()
   collisionDetection()
+  drawScore()
   if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
     dx = -dx;
   }
