@@ -6,8 +6,8 @@
 
 canvas {
   background-color: rgb(3, 58, 175);
-  width: 480px;
-  height: 320px;
+  /* width: 480px;
+  height: 320px; */
   display: block;
   margin: auto;
 }
