@@ -87,6 +87,11 @@ function collisionDetection() {
           dy = -dy;
           b.status = 0;
           score++
+          if (score === brickRowCount * brickColumnCount) {
+            console.log('You win!')
+            document.location.reload();
+            clearInterval(ballInterval);
+          }
         }
       }
     }
