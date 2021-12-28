@@ -3,8 +3,8 @@ const canvas = document.querySelector('#breakout')
 const ctx = canvas.getContext('2d')
 let x = canvas.width / 2
 let y = canvas.height - 30
-let dx = 1
-let dy = -1
+let dx = 2
+let dy = -2
 let ballRadius = 8
 const paddleHeight = 10
 const paddleWidth = 75
@@ -26,6 +26,7 @@ for (let c = 0; c < brickColumnCount; c++) {
 const brickOffsetTop = 30;
 const brickOffsetLeft = 30;
 let score = 0
+let lives = 3
 
 
 //Create ball
@@ -62,6 +63,16 @@ function drawBricks() {
     }
   }
 }
+function drawScore() {
+  ctx.font = '16px Arial'
+  ctx.fillStyle = 'white'
+  ctx.fillText('Score: ' + score, 8, 20);
+}
+function drawLives() {
+  ctx.font = '16px Arial'
+  ctx.fillStyle = 'white'
+  ctx.fillText('Lives: ' + lives, canvas.width - 65, 20);
+}
 function keyDownHandler(event) {
   if (event.key == 'Right' || event.key == 'ArrowRight') {
     rightPressed = true
@@ -96,18 +107,13 @@ function collisionDetection() {
           if (score === brickRowCount * brickColumnCount) {
             console.log('You win!')
             document.location.reload();
-            clearInterval(ballInterval);
           }
         }
       }
     }
   }
 }
-function drawScore() {
-  ctx.font = "16px Arial";
-  ctx.fillStyle = "white";
-  ctx.fillText("Score: " + score, 8, 20);
-}
+
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   drawBricks()
@@ -115,6 +121,7 @@ function draw() {
   drawPaddle()
   collisionDetection()
   drawScore()
+  drawLives()
   if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
     dx = -dx;
   }
@@ -126,9 +133,18 @@ function draw() {
       dy = -dy;
     }
     else {
-      console.log("GAME OVER");
-      document.location.reload();
-      clearInterval(ballInterval); // Needed for Chrome to end game
+      lives--
+      if (!lives) {
+        console.log('GAME OVER');
+        document.location.reload();
+      }
+      else {
+        x = canvas.width / 2;
+        y = canvas.height - 30;
+        dx = 2;
+        dy = -2;
+        paddleX = (canvas.width - paddleWidth) / 2;
+      }
     }
   }
   if (rightPressed && paddleX < canvas.width - paddleWidth) {
@@ -136,16 +152,16 @@ function draw() {
   }
   else if (leftPressed && paddleX > 0) {
     paddleX -= 3;
-
   }
   x += dx
   y += dy
+  requestAnimationFrame(draw)
 }
 
 document.addEventListener('keydown', keyDownHandler, false)
 document.addEventListener('keyup', keyUpHandler, false)
 document.addEventListener("mousemove", mouseMoveHandler, false);
 
-let ballInterval = setInterval(draw, 10)
+draw()
 
 
